@@ -68,7 +68,7 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="referal" role="tabpanel" aria-labelledby="pills-signup-tab">
+                        <div class="tab-pane fade show active" id="signup" role="tabpanel" aria-labelledby="pills-signup-tab">
                             <div class="card-body">
                             <form class="forms-sample" method="POST" action="/setting/app-setting">
                             @csrf

@@ -120,8 +120,12 @@ class AdminController extends Controller
                 $admin = User::find(2);
                 $admin->email=$req->email;
                 $admin->password=Hash::make($req->newpas);
-                $admin->save();
-                return redirect ('/admin-profile')->with('success','Update Successfully !!');    
+                $res=$admin->save();
+                    if($res){
+                        return redirect ('/admin-profile')->with('success','Update Successfully !!');    
+                    }else{
+                        return redirect ('/admin-profile')->with('error','Error While Update Data !!');      
+                    }    
             }else{
                 return redirect ('/admin-profile')->with('error','New Password and Confirm Password Not Matched !!');       
             }    
@@ -133,12 +137,32 @@ class AdminController extends Controller
         $licence = base64_encode($req->licence);
         $package= base64_encode($req->package);
         
-		$admin = User::find(2);
-		$admin->licence=$licence;
-		$admin->package=$package;
-		$admin->save();
-		return redirect ('/admin-profile')->with('success','Licence Verified Successfully !!');  
-	}
+        $curl_handle=curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL,base64_decode('aHR0cHM6Ly9saWNlbmNlLnRlY2huaWNhbHN1bWVyLmNvbS9nZXRkYXRhbmFtZS5waHA/Y3BuPQ==').$req->licence);
+        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+        $query = curl_exec($curl_handle);
+        $data = json_decode($query, true);
+        curl_close($curl_handle);
+        
+        $pac= $data["lists"][0]["package"];
+        $lice= $data["lists"][0]["purchase_code"];
+            
+            if($pac==$req->package && $lice==$req->licence){
+                $admin = User::find(2);
+                $admin->licence=$licence;
+                $admin->package=$package;
+                $res=$admin->save();
+                    if($res){
+                        return redirect ('/admin-profile')->with('success','Licence Verified Successfully !!');    
+                    }else{
+                        return redirect ('/admin-profile')->with('error','Error While Update Data !!');      
+                    }   
+            }else{
+                return redirect ('/admin-profile')->with('error','Licence Details Not Found!!');         
+            }
+        }
 
 
     }

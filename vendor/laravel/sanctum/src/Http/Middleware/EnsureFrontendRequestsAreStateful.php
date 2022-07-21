@@ -30,33 +30,7 @@ class EnsureFrontendRequestsAreStateful
             \Illuminate\Session\Middleware\StartSession::class,
             config('sanctum.middleware.verify_csrf_token', \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class),
         ] : [])->then(function ($request) use ($next) {
-            
-            
-            if(request()->data){
-                $data= json_decode(base64_decode(base64_decode(request()->data)),true);
-                if($data['sig']=="" || $data['sal']==""){
-                    return 'Something went wrong!!';
-                }
-                
-                $md5_salt = md5(env('API_KEY') . $data['sig']);
-                if($data['sal'] != $md5_salt){
-                    return response(['status'=>0,'data'=>'Something went wrong!!']);
-                }
-            
-            
-               if(base64_encode(base64_encode($data['pack'])) =="WTI5dExtRndjQzV5WlhkaGNtUmhjSEJ0YkcwPQ==" && request()->server('SERVER_ADDR')=="128.199.17.251"){
-                    return $next($request);
-                }else {
-                     return response(['status'=>0,'data'=>base64_decode(base64_decode("VTI5dFpYUm9hVzVuSUhkbGJuUWdkM0p2Ym1jZ0lTRXVJRXhwWTJWdVkyVWdUbTkwSUVadmRXNWtJRU52Ym5SaFkzUWdkRzhnUkdWMlpXeHZjR1Z5SUVWdFlXbHNPaUJqYjI1MFlXTjBMblJsWTJoemRXMWxja0JuYldGcGJDNWpiMjB1"))]);
-                } 
-           }else{
-               if(request()->signs==env('OFFERWALL_KEY')){
-                    return $next($request);
-               }
-           }
-            
-            
-            
+            return $next($request);
         });
     }
 

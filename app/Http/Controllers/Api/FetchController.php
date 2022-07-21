@@ -213,7 +213,8 @@ class FetchController extends Controller
      }
      
     public function fetch_reward_trans(){
-        $id=request()->mid;
+         $json= json_decode(base64_decode(base64_decode(request()->data)),true);
+        $id=$json['mid'];
         $data= DB::select('select * from recharge_request where user_id =:uid order by request_id desc limit 10', ['uid' => $id]);
         if($data){
                 return response(['data'=>$data,'status'=>1]);  

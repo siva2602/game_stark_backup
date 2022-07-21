@@ -2,7 +2,7 @@
     <div class="sidebar-header">
         <a class="header-brand" href="{{route('dashboard')}}">
             <div class="logo-img">
-               <img height="80" width="200" src="{{ asset('img/the_game_hub.png')}}" class="header-brand-img" title="ADMIN"> 
+               <img height="30" src="{{ asset('img/logo_white.png')}}" class="header-brand-img" title="RADMIN"> 
             </div>
         </a>
         <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
